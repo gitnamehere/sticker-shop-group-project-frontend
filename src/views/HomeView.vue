@@ -3,5 +3,8 @@
 
 <template>
   <main>
+    <p>
+      sticker shop
+    </p>
   </main>
 </template>
