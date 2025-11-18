@@ -9,3 +9,5 @@ TypeScript: https://www.typescriptlang.org/docs/
 Vue Router: https://router.vuejs.org/guide/
 
 Pinia (we may or may not use this): https://pinia.vuejs.org/
+
+Bootstrap: https://getbootstrap.com/
