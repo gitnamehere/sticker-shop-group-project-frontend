@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <div class="navbar navbar-expand-lg">
+  <div class="container navbar navbar-expand-lg">
     <h2 class="navbar__title">Sticker Shop</h2>
     <nav>
       <RouterLink to="/">Home</RouterLink>
@@ -12,13 +12,7 @@ import { RouterLink } from 'vue-router'
 </template>
 
 <style scoped lang="scss">
-.navbar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 32px;
-
-  &__title {
-    margin-right: 32px;
-  }
+.navbar__title {
+  margin-right: 32px;
 }
 </style>
