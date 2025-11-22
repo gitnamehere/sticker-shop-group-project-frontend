@@ -4,6 +4,7 @@ import jotchua from '@/assets/jotchua.jpg'
 import { onBeforeMount, ref } from 'vue';
 import { API_URL } from '@/config';
 import { useRoute } from 'vue-router';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const route = useRoute();
 
@@ -11,6 +12,22 @@ const stickerName = ref("");
 const description = ref("");
 const stickerType = ref("");
 const stickerData = ref("");
+const stickerShape = ref("square");
+
+const getStickerIcon = (shape: string) => {
+  switch (shape) {
+    case "square":
+      return "fa-square"
+    case "circle":
+      return "fa-circle"
+    case "triangle":
+      return "fa-play" // triangle is a pro icon, but we can use the play icon and rotate it
+    case "heart":
+      return "fa-heart"
+    default: 
+      return "fa-square"
+  }
+}
 
 onBeforeMount(async () => {
   const sticker_id = route.params.id;
@@ -26,6 +43,9 @@ onBeforeMount(async () => {
     stickerName.value = data.name;
     description.value = data.description;
     stickerType.value = data.sticker.type;
+
+    if (stickerType.value === "polygonal") stickerShape.value = data.sticker.shape;
+    if (stickerType.value === "image") stickerData.value = data.sticker.imageData;
   } catch (error) {
     console.log(error);
   }
@@ -36,7 +56,13 @@ onBeforeMount(async () => {
   <CoreNavbar />
   <div class="container">
     <div class="sticker-container">
-      <p v-if="stickerType==='polygonal'">insert polygon here</p>
+      <!-- default rotation is undefined because the component doesn't support "0" rotation -->
+      <FontAwesomeIcon
+        v-if="stickerType==='polygonal'"
+        :icon="getStickerIcon(stickerShape)"
+        :rotation="stickerShape === 'triangle' ? 270 : undefined"
+        class="sticker-icon"
+      />
       <img v-if="stickerType==='image'" :src="jotchua" class="sticker-image" />
     </div>
     <div>
@@ -56,12 +82,17 @@ onBeforeMount(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 50%;
-  max-width: 50%;
+  width: 40%;
   margin-right: 16px;
   border: 1px solid gray;
   border-radius: 8px;
   padding: 16px;
+}
+
+.sticker-icon {
+  width: 100%;
+  height: 100%;
+  color: red
 }
 
 .sticker-image {
