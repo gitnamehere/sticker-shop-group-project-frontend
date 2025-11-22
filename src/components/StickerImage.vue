@@ -14,15 +14,15 @@ const props = defineProps<Props>();
 const getStickerIcon = () => {
   switch (props.shape) {
     case "square":
-      return "fa-square"
+      return "fa-square";
     case "circle":
-      return "fa-circle"
+      return "fa-circle";
     case "triangle":
-      return "fa-play" // triangle is a pro icon, but we can use the play icon and rotate it
+      return "fa-play"; // triangle is a pro icon, but we can use the play icon and rotate it
     case "heart":
-      return "fa-heart"
-    default: 
-      return "fa-square"
+      return "fa-heart";
+    default:
+      return `fa-${props.shape}`;
   }
 }
 </script>
