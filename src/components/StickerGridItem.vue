@@ -1,17 +1,27 @@
 <script setup lang="ts">
+import StickerImage from './StickerImage.vue';
+
 defineProps<{
-  image?: string
-  text: string
+  name: string;
+  stickerType: string
+  imageData?: string
+  shape?: string
+  color?: string
 }>()
 </script>
 
 <template>
   <div class="sticker-grid-item">
     <div class="sticker-image-container">
-      <img src="https://picsum.photos/250/250" class="sticker-image" />
+      <StickerImage
+        :sticker-type="stickerType"
+        :image-data="imageData"
+        :shape="shape"
+        color="red"
+      />
     </div>
-    <div class="sticker-text">
-      {{ text }}
+    <div class="sticker-name">
+      {{ name }}
     </div>
   </div>
 </template>
@@ -26,9 +36,12 @@ defineProps<{
   box-shadow: 2px 2px 4px rgb(116, 115, 115);
 }
 .sticker-image-container {
+  aspect-ratio: 1/1;
+  width: 100%;
+  height: 100%;
   margin-bottom: 8px;
 }
-.sticker-text {
+.sticker-name {
   font-weight: bold;
 }
 .sticker-image {
