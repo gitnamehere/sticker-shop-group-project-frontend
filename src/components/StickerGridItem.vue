@@ -72,7 +72,7 @@ function pickColor(c: string) {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid rgba(0,0,0,0.12);
+  border: 2px solid rgba(0,0,0,0.15);
   padding: 0;
   cursor: pointer;
 }
