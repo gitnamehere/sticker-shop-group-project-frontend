@@ -30,7 +30,7 @@ onBeforeMount(async () => {
     stickerType.value = data.sticker.type
 
     if (stickerType.value === 'polygonal') stickerShape.value = data.sticker.shape
-    if (stickerType.value === 'image') stickerData.value = data.sticker.imageData
+    if (stickerType.value === 'image') stickerData.value = data.sticker.image_data
   } catch (error) {
     console.log(error)
   }
