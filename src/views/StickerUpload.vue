@@ -36,11 +36,21 @@ const submitSticker = async () => {
 <template>
   <main>
     <CoreNavbar />
-    <div class="container">
-      <input v-model="name" placeholder="Name"/>
-      <input v-model="description" placeholder="Description"/>
-      <input @input="handleFileUpload" id="input" type="file" accept=".png,.jpg,.jpeg" />
-      <button @click="submitSticker">Submit</button>
+    <div class="container card p-3">
+      <h1>Upload Sticker</h1>
+      <div class="mb-3">
+        <label class="form-label">Sticker Name</label>
+        <input v-model="name" placeholder="Name" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Sticker Description</label>
+        <input v-model="description" placeholder="Description" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">File</label>
+        <input @input="handleFileUpload" id="input" type="file" accept=".png,.jpg,.jpeg" class="form-control" />
+      </div>
+      <button @click="submitSticker" class="btn btn-primary">Submit</button>
     </div>
   </main>
 </template>
