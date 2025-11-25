@@ -9,8 +9,8 @@ const props = defineProps<{
   shape?: string
 }>()
 
-
-const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'white', 'black']
+// colors currently in the db
+const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'black', 'white']
 const selectedColor = ref("red");
 
 function pickColor(color: string) {
@@ -34,11 +34,11 @@ function pickColor(color: string) {
     <div class="sticker-name">
       {{ name }}
     </div>
-    <div v-if="stickerType === 'polygonal'" class="color-palette">
+    <div v-if="stickerType === 'polygonal'" class="color-palette container row">
       <button
         v-for="color in colors"
         :key="color"
-        class="color-swatch"
+        class="color-swatch col-2"
         :style="{ backgroundColor: color }"
         @click="pickColor(color)"
         :aria-label="'Pick color ' + color"
