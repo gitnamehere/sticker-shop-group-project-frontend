@@ -16,5 +16,4 @@ import StickerGridItem from '@/components/StickerGridItem.vue'
   </main>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
