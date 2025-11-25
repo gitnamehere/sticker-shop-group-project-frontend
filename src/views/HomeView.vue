@@ -36,7 +36,7 @@ onBeforeMount(async () => {
           <StickerGridItem 
             :name="sticker.name"
             :sticker-type="sticker.sticker.type"
-            :image-data="sticker.sticker.imageData"
+            :image-data="sticker.sticker.image_data"
             :shape="sticker.sticker.shape"
             color="red"
           />

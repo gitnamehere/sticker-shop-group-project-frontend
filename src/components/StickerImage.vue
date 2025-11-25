@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import jotchua from '@/assets/jotchua.jpg'
 
 interface Props {
   stickerType: string
