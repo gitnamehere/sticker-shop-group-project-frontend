@@ -2,44 +2,46 @@
 import { ref } from 'vue'
 import StickerImage from './StickerImage.vue';
 
-defineProps<{
+const props = defineProps<{
   name: string;
   stickerType: string
   imageData?: string
   shape?: string
-  color?: string
 }>()
 
 
-const colors = ['white', 'black', 'yellow', 'cyan', 'pink', 'red', 'grey']
-const selectedColor = ref('white')
+const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'white', 'black']
+const selectedColor = ref("red");
 
-function pickColor(c: string) {
-  selectedColor.value = c
+function pickColor(color: string) {
+  selectedColor.value = color
 }
 </script>
 
 <template>
   <div class="sticker-grid-item">
-    <div class="sticker-image-container" :style="{ boxShadow: `0 0 0 6px ${selectedColor}` }">
+    <div
+      class="sticker-image-container"
+      :style="{ backgroundColor: (selectedColor === 'white' ? '#EEE' : 'white') }"
+    >
       <StickerImage
         :sticker-type="stickerType"
         :image-data="imageData"
         :shape="shape"
-        color="red"
+        :color="selectedColor"
       />
     </div>
     <div class="sticker-name">
       {{ name }}
     </div>
-    <div class="color-palette">
+    <div v-if="stickerType === 'polygonal'" class="color-palette">
       <button
-        v-for="c in colors"
-        :key="c"
+        v-for="color in colors"
+        :key="color"
         class="color-swatch"
-        :style="{ backgroundColor: c }"
-        @click="pickColor(c)"
-        :aria-label="'Pick color ' + c"
+        :style="{ backgroundColor: color }"
+        @click="pickColor(color)"
+        :aria-label="'Pick color ' + color"
         type="button"
       ></button>
     </div>
