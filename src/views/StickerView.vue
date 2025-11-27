@@ -105,8 +105,6 @@ onBeforeMount(async () => {
               borderColor: selectedColor === color ? 'gray' : '#0002'
             }"
             @click="selectedColor = color"
-            :aria-label="'Pick color ' + color"
-            type="button"
           ></button>
         </div>
       </div>
