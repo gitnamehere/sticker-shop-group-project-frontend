@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import StickerView from '@/views/StickerView.vue'
 import StickerUpload from '@/views/StickerUpload.vue'
+import CartView from '@/views/CartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,11 @@ const router = createRouter({
       name: 'sticker',
       component: StickerView,
     },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
+    }
   ],
 })
 

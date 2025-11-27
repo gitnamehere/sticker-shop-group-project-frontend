@@ -116,9 +116,11 @@ onBeforeMount(async () => {
           ></button>
         </div>
       </div>
-      <button class="btn btn-primary" @click="addToCart">
-        Add to cart
-      </button>
+      <div>
+        <button class="btn btn-primary" @click="addToCart">
+          Add to cart
+        </button>
+      </div>
     </div>
   </div>
 </template>
