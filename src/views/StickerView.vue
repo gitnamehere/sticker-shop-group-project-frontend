@@ -84,7 +84,7 @@ onBeforeMount(async () => {
           <button
             v-for="material in materials"
             :key="material.name"
-            class="btn border me-2"
+            class="btn border me-2 mb-2"
             :class="selectedMaterial === material.name ? 'btn-secondary' : 'btn-light'"
             @click="selectedMaterial = material.name"
           >
@@ -98,7 +98,7 @@ onBeforeMount(async () => {
           <button
             v-for="color in colors"
             :key="color"
-            class="color-swatch btn col-2"
+            class="color-swatch btn me-2 mb-2 col-2"
             :style="{
               backgroundColor: color,
               borderWidth: selectedColor === color ? '4px' : '2px',
@@ -131,7 +131,6 @@ onBeforeMount(async () => {
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  margin-right: 4px;
   border: 2px solid #0002;
 }
 </style>
