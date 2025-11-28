@@ -2,11 +2,12 @@
 import CoreNavbar from '@/components/CoreNavbar.vue'
 import { computed, onBeforeMount, ref } from 'vue'
 import { API_URL } from '@/config'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import StickerImage from '@/components/StickerImage.vue'
 import { addStickerToCart } from '@/utils/cart'
 
 const route = useRoute()
+const router = useRouter()
 
 const stickerName = ref('')
 const description = ref('')
@@ -22,7 +23,7 @@ const materials = ref([])
 
 const addToCart = () => {
   addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, 1);
-  alert("Added to cart!")
+  router.push("/cart")
 }
 
 const stickerBackgroundColor = computed(() => {
