@@ -1,22 +1,69 @@
 <script setup lang="ts">
 import CoreNavbar from '@/components/CoreNavbar.vue';
+import StickerImage from '@/components/StickerImage.vue';
+import { API_URL } from '@/config';
 import { getCart } from '@/utils/cart';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
-const cart = ref(getCart());
+const cart = ref()
+
+onBeforeMount(async () => {
+  const stickersInCart = getCart();
+  const stickers = [];
+
+  for (let i = 0; i < stickersInCart.length; i++) {
+    const response = await fetch(`${API_URL}stickers/${stickersInCart[i].sticker_id}`);
+    if (response.status !== 200) return alert("Error fetching sticker data");
+
+    const data = await response.json();
+
+    stickers.push({
+      stickerId: data.sticker_id,
+      name: data.name,
+      type: data.sticker.type,
+      shape: data.sticker.shape,
+      imageData: data.sticker.image_data,
+      material: stickersInCart[i].material,
+      quantity: stickersInCart[i].quantity,
+      color: stickersInCart[i].color,
+    })
+  }
+
+  cart.value = stickers;
+})
 </script>
 
 <template>
   <CoreNavbar />
   <div class="container">
     <h1>Cart</h1>
-    <div v-if="cart.length">
+    <div v-if="cart.length" class="list-group">
       <div
         v-for="sticker in cart"
         :key="sticker"
+        class="list-group-item cart-item d-flex row"
       >
-        <p>{{ sticker }}</p>
+        <div class="sticker-image col-2">
+          <StickerImage
+            :sticker-type="sticker.type"
+            :image-data="sticker.imageData"
+            :shape="sticker.shape"
+            :color="sticker.color"
+          />
+        </div>
+        <div class="col-8">
+          <p>{{ sticker.name }}</p>
+          <p>Material: {{ sticker.material }}</p>
+          <p>Color: {{ sticker.color }}</p>
+          <p>Quantity: {{ sticker.quantity}}</p>
+        </div>
+        <div class="col-2">
+          <button>Remove from cart</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+</style>
