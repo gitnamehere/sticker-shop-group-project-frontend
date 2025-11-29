@@ -16,8 +16,8 @@ const stickerId = ref()
 const stickerType = ref('')
 const stickerData = ref('')
 const stickerShape = ref('square')
-const selectedMaterial = ref('')
-const selectedColor = ref('')
+const selectedMaterial = ref()
+const selectedColor = ref()
 const colors = ref([])
 const materials = ref([])
 
@@ -27,9 +27,9 @@ const addToCart = () => {
 }
 
 const stickerBackgroundColor = computed(() => {
-  if (stickerType.value === 'image') return selectedColor.value;
+  if (stickerType.value === 'image') return selectedColor.value.color;
 
-  return (selectedColor.value === 'white' ? '#EEE' : 'white');
+  return (selectedColor.value.color === 'white' ? '#EEE' : 'white');
 })
 
 onBeforeMount(async () => {
@@ -51,8 +51,8 @@ onBeforeMount(async () => {
     colors.value = data.sticker.colors;
     materials.value = data.sticker.materials;
 
-    selectedColor.value = data.sticker.colors[0].color;
-    selectedMaterial.value = data.sticker.materials[0].material;
+    selectedColor.value = data.sticker.colors[0];
+    selectedMaterial.value = data.sticker.materials[0];
 
     if (stickerType.value === 'polygonal') stickerShape.value = data.sticker.shape
     if (stickerType.value === 'image') stickerData.value = data.sticker.image_data;
@@ -73,7 +73,7 @@ onBeforeMount(async () => {
         :sticker-type="stickerType"
         :image-data="stickerData"
         :shape="stickerShape"
-        :color="selectedColor"
+        :color="selectedColor.color"
       />
     </div>
     <div class="card container-fluid p-3">
@@ -87,8 +87,8 @@ onBeforeMount(async () => {
             v-for="item in materials"
             :key="item.material_id"
             class="btn border me-2 mb-2"
-            :class="selectedMaterial === item.material ? 'btn-secondary' : 'btn-light'"
-            @click="selectedMaterial = item.material"
+            :class="selectedMaterial.material === item.material ? 'btn-secondary' : 'btn-light'"
+            @click="selectedMaterial = item"
           >
             {{ item.material }}
           </button>
@@ -103,10 +103,10 @@ onBeforeMount(async () => {
             class="color-swatch btn me-2 mb-2 col-2"
             :style="{
               backgroundColor: item.color,
-              borderWidth: selectedColor === item.color ? '4px' : '2px',
-              borderColor: selectedColor === item.color ? 'gray' : '#0002'
+              borderWidth: selectedColor.color === item.color ? '4px' : '2px',
+              borderColor: selectedColor.color === item.color ? 'gray' : '#0002'
             }"
-            @click="selectedColor = item.color"
+            @click="selectedColor = item"
           ></button>
         </div>
       </div>

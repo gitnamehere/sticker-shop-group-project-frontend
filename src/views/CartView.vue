@@ -6,7 +6,7 @@ import { getCart, removeStickerFromCart, clearCart } from '@/utils/cart';
 import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const cart = ref<any[]>([])
+const cart = ref([])
 const router = useRouter();
 const loading = ref(false);
 
@@ -41,7 +41,6 @@ onBeforeMount(async () => {
   cart.value = stickers;
 })
 
-
 async function placeOrder() {
   if (!cart.value || cart.value.length === 0) {
     return alert('Your cart is empty');
@@ -49,16 +48,15 @@ async function placeOrder() {
 
   loading.value = true;
   try {
-    const itemsPayload = cart.value.map((s: any) => ({
-      stickerId: s.stickerId,
-      materialId: null,
-      colorId: null,
-      quantity: s.quantity ?? 1,
+    const itemsPayload = cart.value.map((sticker: any) => ({
+      stickerId: sticker.stickerId,
+      materialId: sticker.material.material_id,
+      colorId: sticker.color.color_id,
+      quantity: sticker.quantity,
     }));
 
     const payload = {
       accountId: 1, 
-      orderId: null,
       items: itemsPayload,
     };
 
@@ -68,7 +66,7 @@ async function placeOrder() {
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
+    if (res.status >= 400) {
       const text = await res.text();
       throw new Error(text || res.statusText);
     }
@@ -76,14 +74,13 @@ async function placeOrder() {
     const data = await res.json();
     alert('Order placed. id=' + (data.order_id ?? data.orderId ?? ''));
     router.push({ name: 'home', query: { orderId: String(data.order_id ?? data.orderId ?? '') } });
+    clearCart();
   } catch (err: any) {
     alert('Failed to place order: ' + (err?.message || err));
   } finally {
     loading.value = false;
   }
-  clearCart();
 }
-
 </script>
 
 <template>
@@ -101,13 +98,13 @@ async function placeOrder() {
             :sticker-type="sticker.type"
             :image-data="sticker.imageData"
             :shape="sticker.shape"
-            :color="sticker.color"
+            :color="sticker.color.color"
           />
         </div>
         <div class="col-8">
           <p>{{ sticker.name }}</p>
-          <p>Material: {{ sticker.material }}</p>
-          <p>Color: {{ sticker.color }}</p>
+          <p>Material: {{ sticker.material.material }}</p>
+          <p>Color: {{ sticker.color.color }}</p>
           <p>Quantity: {{ sticker.quantity}}</p>
         </div>
         <div class="col-2">
