@@ -31,3 +31,8 @@ export const removeStickerFromCart = (index: number) => {
 
   localStorage.setItem("cart", JSON.stringify(cart));
 }
+
+export const clearCart = () => {
+  localStorage.removeItem("cart");
+}
+

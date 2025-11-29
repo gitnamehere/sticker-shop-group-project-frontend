@@ -2,16 +2,17 @@
 import CoreNavbar from '@/components/CoreNavbar.vue';
 import StickerImage from '@/components/StickerImage.vue';
 import { API_URL } from '@/config';
-import { getCart, removeStickerFromCart } from '@/utils/cart';
+import { getCart, removeStickerFromCart, clearCart } from '@/utils/cart';
 import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const cart = ref()
+const cart = ref<any[]>([])
+const router = useRouter();
+const loading = ref(false);
 
 const removeFromCart = (index: number) => {
   removeStickerFromCart(index);
   // reload page to refresh cart page
-  // (we should probably do this reactively)
-  // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload
   window.location.reload();
 }
 
@@ -40,8 +41,47 @@ onBeforeMount(async () => {
   cart.value = stickers;
 })
 
-function placeOrder() {
-  alert('Order placed successfully!');
+
+async function placeOrder() {
+  if (!cart.value || cart.value.length === 0) {
+    return alert('Your cart is empty');
+  }
+
+  loading.value = true;
+  try {
+    const itemsPayload = cart.value.map((s: any) => ({
+      stickerId: s.stickerId,
+      materialId: null,
+      colorId: null,
+      quantity: s.quantity ?? 1,
+    }));
+
+    const payload = {
+      accountId: 1, 
+      orderId: null,
+      items: itemsPayload,
+    };
+
+    const res = await fetch(`${API_URL}orders/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || res.statusText);
+    }
+
+    const data = await res.json();
+    alert('Order placed. id=' + (data.order_id ?? data.orderId ?? ''));
+    router.push({ name: 'home', query: { orderId: String(data.order_id ?? data.orderId ?? '') } });
+  } catch (err: any) {
+    alert('Failed to place order: ' + (err?.message || err));
+  } finally {
+    loading.value = false;
+  }
+  clearCart();
 }
 
 </script>
