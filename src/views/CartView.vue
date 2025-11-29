@@ -114,9 +114,9 @@ async function placeOrder() {
     </div>
     <div class="mt-3">
       <button
+        v-if="cart.length"
         class="btn btn-primary"
         @click="placeOrder"
-        :disabled="!cart || !cart.length"
         type="button"
       >
         Place Order
