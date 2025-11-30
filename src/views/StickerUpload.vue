@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CoreNavbar from '@/components/CoreNavbar.vue'
 import { API_URL } from '@/config';
 import { ref } from 'vue';
 
@@ -35,7 +34,6 @@ const submitSticker = async () => {
 
 <template>
   <main>
-    <CoreNavbar />
     <div class="container card p-3">
       <h1>Upload Sticker</h1>
       <div class="mb-3">
