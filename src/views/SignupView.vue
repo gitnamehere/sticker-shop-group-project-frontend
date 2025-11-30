@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CoreNavbar from '@/components/CoreNavbar.vue'
 import { API_URL } from '@/config';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -51,7 +50,6 @@ const submitButton = async () => {
 </script>
 
 <template>
-  <CoreNavbar />
   <div class="container card p-4">
     <h2 class="mb-4">Create an account</h2>
     <div class="row mb-4 gx-4">

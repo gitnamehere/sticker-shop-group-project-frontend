@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CoreNavbar from '@/components/CoreNavbar.vue'
 import { computed, onBeforeMount, ref } from 'vue'
 import { API_URL } from '@/config'
 import { useRoute, useRouter } from 'vue-router'
@@ -64,7 +63,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <CoreNavbar />
   <div class="container d-flex">
     <div
       class="sticker-container"
