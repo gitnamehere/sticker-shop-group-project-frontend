@@ -56,7 +56,7 @@ const submitButton = async () => {
 <template>
   <CoreNavbar />
   <div class="container card p-4">
-    <h2 class="mb-3">Create an account</h2>
+    <h2 class="mb-4">Create an account</h2>
     <div class="row mb-4 gx-4">
       <h4>Name</h4>
       <div class="col-12 col-md-4">
