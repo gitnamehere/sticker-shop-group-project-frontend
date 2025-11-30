@@ -3,6 +3,7 @@ import CoreNavbar from '@/components/CoreNavbar.vue'
 import { API_URL } from '@/config';
 import { ref } from 'vue';
 
+const account_id = localStorage.getItem('account_id') || "1";
 const image = ref();
 const name = ref("");
 const description = ref("");
@@ -22,7 +23,7 @@ const submitSticker = async () => {
   formData.append("imageData", image.value);
   formData.append("name", name.value);
   formData.append("description", description.value);
-  formData.append("creator_id", "1"); // placeholder
+  formData.append("account_id", account_id);
 
   fetch(`${API_URL}stickers/create`, {
     method: "POST",
