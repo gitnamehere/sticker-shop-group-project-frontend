@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CoreNavbar from '@/components/CoreNavbar.vue'
 import { API_URL } from '@/config';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const firstName = ref("");
@@ -14,50 +14,90 @@ const street = ref("");
 const city = ref("");
 const postalCode = ref("");
 
+const loading = ref(true);
+const message = ref("");
+
 const router = useRouter();
 
+const accountId = localStorage.getItem('account_id');
+
+onMounted(async () => {
+  if (!accountId) {
+    router.push('/login');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}account/${accountId}`);
+    if (!res.ok) {
+      router.push('/login');
+      return;
+    }
+    const data = await res.json().catch(() => null);
+    if (data) {
+      firstName.value = data.first_name ?? data.firstName ?? "";
+      middleName.value = data.middle_name ?? data.middleName ?? "";
+      lastName.value = data.last_name ?? data.lastName ?? "";
+      email.value = data.email_address ?? data.email ?? "";
+      phoneNumber.value = data.phone_number ?? data.phoneNumber ?? "";
+      street.value = data.street ?? "";
+      city.value = data.city ?? "";
+      postalCode.value = data.postal_code ?? data.postalCode ?? "";
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+});
+
 const submitButton = async () => {
+  if (!accountId) {
+    router.push('/login');
+    return;
+  }
+
   const payload = {
-    firstName: firstName.value,
-    middleName: middleName.value,
-    lastName: lastName.value,
-    email: email.value,
-    password: password.value,
-    phoneNumber: phoneNumber.value,
-    street: street.value,
-    city: city.value,
-    postalCode: postalCode.value,
+    firstName: firstName.value || null,
+    middleName: middleName.value || null,
+    lastName: lastName.value || null,
+    email: email.value || null,
+    password: password.value || null,
+    phoneNumber: phoneNumber.value || null,
+    street: street.value || null,
+    city: city.value || null,
+    postalCode: postalCode.value || null,
   };
 
   try {
-    const res = await fetch(`${API_URL}account/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const res = await fetch(`${API_URL}account/${accountId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
       const text = await res.text();
-      console.error("Signup failed:", res.status, text);
-      alert("Signup failed. Please try again.");
+      console.error('Update failed:', res.status, text);
+      message.value = 'Error updating account';
       return;
     }
 
-    const data = await res.json().catch(() => null);
-    router.push('/login');
+    await res.json().catch(() => null);
+    message.value = 'Account updated successfully';
+    password.value = '';
   } catch (err) {
-    console.error("Signup error:", err);
-    alert("Signup error. Please try again.");
+    console.error('Update error:', err);
+    message.value = 'Error updating account';
   }
 };
-
 </script>
 
 <template>
-  <main class="signup-page">
+  <main class="account-page">
     <CoreNavbar />
-    <div class="container card p-4 signup-card">
-      <h2 class="mb-3">Create an account</h2>
+    <div class="container card p-4 account-card">
+      <h2 class="mb-3">Edit Account Details</h2>
 
       <form @submit.prevent="submitButton">
         <div class="row g-2">
@@ -111,7 +151,7 @@ const submitButton = async () => {
         </div>
 
         <div class="d-flex justify-content-end mt-4">
-          <button type="submit" class="btn btn-primary btn-submit">Create account</button>
+          <button type="submit" class="btn btn-primary btn-submit">Submit</button>
         </div>
       </form>
     </div>
@@ -121,8 +161,8 @@ const submitButton = async () => {
 <!-- "Improve the style of this page." OpenAI. (2025). ChatGPT-5 mini (August 7 2025 version) [Large language
 model]. https://chat.openai/com/chat -->
 <style scoped>
-.signup-page { padding: 28px 12px; }
-.signup-card {
+.account-page { padding: 28px 12px; }
+.account-card {
   max-width: 900px;
   margin: 18px auto;
   border-radius: 12px;

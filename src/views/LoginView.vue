@@ -30,6 +30,21 @@ const loginButton = async () => {
     }
 
     const data = await res.json().catch(() => null);
+    if (data) {
+      try {
+        const accountId = data?.account_id ?? data?.accountId ?? data?.id ?? null;
+        if (accountId !== null && accountId !== undefined) {
+          localStorage.removeItem('user');
+          localStorage.setItem('account_id', String(accountId));
+          localStorage.setItem('isLoggedIn', 'true');
+        } else {
+          console.warn('Login response missing account id, not storing session');
+        }
+      } catch (e) {
+        console.warn('Could not save session to localStorage', e);
+      }
+    }
+
     router.push('/');
   } catch (err) {
     console.error("Login error:", err);
