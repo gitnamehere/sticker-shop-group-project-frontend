@@ -17,6 +17,13 @@ interface Material {
   price: number
 }
 
+interface Size {
+  size_id: number,
+  sticker_id: number,
+  length: number,
+  width: number
+}
+
 const route = useRoute()
 const router = useRouter()
 
@@ -29,11 +36,13 @@ const stickerData = ref('')
 const stickerShape = ref('square')
 const selectedMaterial = ref()
 const selectedColor = ref()
+const selectedSize = ref()
 const colors = ref<Color[]>([])
 const materials = ref<Material[]>([])
+const sizes = ref<Size[]>([])
 
 const addToCart = () => {
-  addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, 1);
+  addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, selectedSize.value, 1);
   router.push("/cart")
 }
 
@@ -41,6 +50,14 @@ const stickerBackgroundColor = computed(() => {
   if (stickerType.value === 'image') return selectedColor.value.color;
 
   return (selectedColor.value.color === 'white' ? '#EEE' : 'white');
+})
+
+const price = computed(() => {
+  const { length, width } = selectedSize.value;
+  const { price } = selectedMaterial.value;
+  // material price is based on 100 square cm
+  // length and width are in centimeters
+  return price * ((length * width) / 100);
 })
 
 onBeforeMount(async () => {
@@ -62,9 +79,11 @@ onBeforeMount(async () => {
 
     colors.value = data.sticker.colors;
     materials.value = data.sticker.materials;
+    sizes.value = data.sticker.sizes;
 
     selectedColor.value = data.sticker.colors[0];
     selectedMaterial.value = data.sticker.materials[0];
+    selectedSize.value = data.sticker.sizes[0];
 
     if (stickerType.value === 'polygonal') stickerShape.value = data.sticker.shape
     if (stickerType.value === 'image') stickerData.value = data.sticker.image_data;
@@ -90,8 +109,9 @@ onBeforeMount(async () => {
     </div>
     <div class="card container-fluid p-3">
       <h2 class="mb-2">{{ stickerName }}</h2>
-      <p>{{ description }}</p>
-      <p class="fw-light">By: {{ creator }}</p>
+      <p class="mb-2">{{ description }}</p>
+      <p class="fw-light mb-3">By: {{ creator }}</p>
+      <h3 class="mb-3">${{ price }}</h3>
       <div class="mb-3">
         <p class="mb-0">Material</p>
         <div>
@@ -120,6 +140,20 @@ onBeforeMount(async () => {
             }"
             @click="selectedColor = item"
           ></button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <p class="mb-0">Sticker Size</p>
+        <div>
+          <button
+            v-for="item in sizes"
+            :key="item.size_id"
+            class="btn border me-2 mb-2"
+            :class="selectedSize.size_id === item.size_id? 'btn-secondary' : 'btn-light'"
+            @click="selectedSize = item"
+          >
+            {{ item.length }} cm x {{ item.width }} cm
+          </button>
         </div>
       </div>
       <div>
