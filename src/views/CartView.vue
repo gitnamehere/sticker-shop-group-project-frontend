@@ -6,6 +6,10 @@ import { getCart, removeStickerFromCart, clearCart } from '@/utils/cart';
 import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+const accountId = localStorage.getItem('account_id');
+
+const router = useRouter();
+
 interface Color {
   color_id: number,
   color: string
@@ -38,7 +42,6 @@ interface Cart {
 }
 
 const cart = ref<Cart[]>([])
-const router = useRouter();
 const loading = ref(false);
 
 const removeFromCart = (index: number) => {
@@ -48,6 +51,8 @@ const removeFromCart = (index: number) => {
 }
 
 onBeforeMount(async () => {
+  if (!accountId) return router.push("/login");
+
   const stickersInCart = getCart();
   const stickers = [];
 
