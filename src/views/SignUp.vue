@@ -39,6 +39,7 @@ const submitButton = async () => {
     if (!res.ok) {
       const text = await res.text();
       console.error("Signup failed:", res.status, text);
+      alert("Signup failed. Please try again.");
       return;
     }
 
@@ -46,6 +47,7 @@ const submitButton = async () => {
     router.push('/');
   } catch (err) {
     console.error("Signup error:", err);
+    alert("Signup error. Please try again.");
   }
 };
 
@@ -116,7 +118,8 @@ const submitButton = async () => {
   </main>
 </template>
 
-<!-- Citation: Used ChatGPT to help stylize -->
+<!-- "Improve the style of this page." OpenAI. (2025). ChatGPT-5 mini (August 7 2025 version) [Large language
+model]. https://chat.openai/com/chat -->
 <style scoped>
 .signup-page { padding: 28px 12px; }
 .signup-card {

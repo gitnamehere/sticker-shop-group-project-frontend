@@ -25,6 +25,7 @@ const loginButton = async () => {
     if (!res.ok) {
       const text = await res.text();
       console.error("Login failed:", res.status, text);
+      alert("Login failed. Please try again.");
       return;
     }
 
@@ -32,6 +33,7 @@ const loginButton = async () => {
     router.push('/');
   } catch (err) {
     console.error("Login error:", err);
+    alert("Login error. Please try again.");
   }
 };
 </script>
