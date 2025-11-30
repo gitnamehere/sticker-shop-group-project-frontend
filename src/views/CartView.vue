@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import CoreNavbar from '@/components/CoreNavbar.vue';
 import StickerImage from '@/components/StickerImage.vue';
 import { API_URL } from '@/config';
 import { getCart, removeStickerFromCart } from '@/utils/cart';
 import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const accountId = localStorage.getItem('account_id');
+
+const router = useRouter();
 
 const cart = ref()
 
@@ -16,6 +20,8 @@ const removeFromCart = (index: number) => {
 }
 
 onBeforeMount(async () => {
+  if (!accountId) return router.push("/login");
+
   const stickersInCart = getCart();
   const stickers = [];
 
@@ -42,10 +48,9 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <CoreNavbar />
   <div class="container">
     <h1>Cart</h1>
-    <div v-if="cart.length" class="list-group">
+    <div v-if="cart?.length" class="list-group">
       <div
         v-for="(sticker, index) in cart"
         :key="sticker"

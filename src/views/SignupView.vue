@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { API_URL } from '@/config';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const accountId = localStorage.getItem('account_id');
 
 const firstName = ref("");
 const middleName = ref("");
@@ -17,40 +13,9 @@ const street = ref("");
 const city = ref("");
 const postalCode = ref("");
 
-onMounted(async () => {
-  if (!accountId) {
-    router.push('/login');
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_URL}account/${accountId}`);
-    if (!res.ok) {
-      router.push('/login');
-      return;
-    }
-    const data = await res.json();
-    if (data) {
-      firstName.value = data.first_name;
-      middleName.value = data.middle_name;
-      lastName.value = data.last_name;
-      email.value = data.email_address;
-      phoneNumber.value = data.phone_number;
-      street.value = data.street;
-      city.value = data.city;
-      postalCode.value = data.postal_code;
-    }
-  } catch {
-    alert("Error fetching account details");
-  }
-});
+const router = useRouter();
 
 const submitButton = async () => {
-  if (!accountId) {
-    router.push('/login');
-    return;
-  }
-
   const payload = {
     firstName: firstName.value,
     middleName: middleName.value,
@@ -64,39 +29,41 @@ const submitButton = async () => {
   };
 
   try {
-    const res = await fetch(`${API_URL}account/${accountId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch(`${API_URL}account/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
-      return alert("Account failed to update")
+      return alert("Signup failed. Please try again.");
     }
 
     await res.json();
-    alert("Account updated!")
+    router.push('/login');
   } catch (err) {
-    console.error('Update error:', err);
+    console.error("Signup error:", err);
+    alert("Signup error. Please try again.");
   }
 };
+
 </script>
 
 <template>
   <div class="container card p-4">
-    <h2 class="mb-4">Edit Account Details</h2>
+    <h2 class="mb-4">Create an account</h2>
     <div class="row mb-4 gx-4">
       <h4>Name</h4>
       <div class="col-12 col-md-4">
-        <label class="form-label">First Name</label>
+        <label class="form-label">First</label>
         <input v-model="firstName" placeholder="First Name" class="form-control" />
       </div>
       <div class="col-12 col-md-4">
-        <label class="form-label">Middle Name</label>
+        <label class="form-label">Middle</label>
         <input v-model="middleName" placeholder="Middle Name" class="form-control" />
       </div>
       <div class="col-12 col-md-4">
-        <label class="form-label">Last Name</label>
+        <label class="form-label">Last</label>
         <input v-model="lastName" placeholder="Last Name" class="form-control" />
       </div>
     </div>
@@ -133,7 +100,7 @@ const submitButton = async () => {
       </div>
     </div>
     <div class="d-flex justify-content-end">
-      <button @click="submitButton" class="btn btn-primary">Submit</button>
+      <button @click="submitButton" class="btn btn-primary">Create account</button>
     </div>
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CoreNavbar from '@/components/CoreNavbar.vue'
 import { API_URL } from '@/config';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -23,63 +22,42 @@ const loginButton = async () => {
     });
 
     if (!res.ok) {
-      const text = await res.text();
-      console.error("Login failed:", res.status, text);
-      alert("Login failed. Please try again.");
-      return;
+      return alert("Login failed. Please try again.");
     }
 
-    const data = await res.json().catch(() => null);
-    if (data) {
-      try {
-        const accountId = data?.account_id ?? data?.accountId ?? data?.id ?? null;
-        if (accountId !== null && accountId !== undefined) {
-          localStorage.removeItem('user');
-          localStorage.setItem('account_id', String(accountId));
-          localStorage.setItem('isLoggedIn', 'true');
-        } else {
-          console.warn('Login response missing account id, not storing session');
-        }
-      } catch (e) {
-        console.warn('Could not save session to localStorage', e);
-      }
+    const data = await res.json();
+    const {account_id} = data;
+  
+    if (!account_id) {
+      throw Error();
     }
 
+    localStorage.removeItem('user');
+    localStorage.setItem('account_id', String(account_id));
+    localStorage.setItem('isLoggedIn', 'true');
     router.push('/');
-  } catch (err) {
-    console.error("Login error:", err);
+  } catch {
     alert("Login error. Please try again.");
   }
 };
 </script>
 
 <template>
-  <main class="login-page">
-    <CoreNavbar />
-    <div class="container card p-4 login-card">
-      <h2 class="mb-3">Login to your account</h2>
-
-      <form @submit.prevent="loginButton">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" required />
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input v-model="password" type="password" class="form-control" id="password" placeholder="Password" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
+  <div class="container card p-4 login-card">
+    <h2 class="mb-3">Login to your account</h2>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input v-model="email" type="email" class="form-control" id="email" placeholder="Enter email" required />
     </div>
-  </main>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input v-model="password" type="password" class="form-control" id="password" placeholder="Password" required />
+    </div>
+    <button @click="loginButton" class="btn btn-primary">Login</button>
+  </div>
 </template>
 
 <style scoped>
-.login-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 .login-card {
   max-width: 400px;
   margin: 2rem auto;
