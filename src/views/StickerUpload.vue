@@ -22,7 +22,7 @@ const submitSticker = async () => {
   formData.append("imageData", image.value);
   formData.append("name", name.value);
   formData.append("description", description.value);
-  formData.append("creator_id", "1"); // placeholder
+  formData.append("account_id", "1"); // placeholder
 
   fetch(`${API_URL}stickers/create`, {
     method: "POST",
