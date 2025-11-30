@@ -43,7 +43,7 @@ const submitButton = async () => {
     }
 
     const data = await res.json().catch(() => null);
-    router.push('/login');
+    router.push('/');
   } catch (err) {
     console.error("Signup error:", err);
   }
