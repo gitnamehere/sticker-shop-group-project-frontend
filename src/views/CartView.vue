@@ -87,6 +87,7 @@ async function placeOrder() {
       stickerId: sticker.stickerId,
       materialId: sticker.material.material_id,
       colorId: sticker.color.color_id,
+      sizeId: sticker.size.size_id,
       quantity: sticker.quantity,
     }));
 
@@ -102,16 +103,15 @@ async function placeOrder() {
     });
 
     if (res.status >= 400) {
-      const text = await res.text();
-      throw new Error(text || res.statusText);
+      throw Error();
     }
 
     const data = await res.json();
-    alert('Order placed. id=' + (data.order_id ?? data.orderId ?? ''));
-    router.push({ name: 'home', query: { orderId: String(data.order_id ?? data.orderId ?? '') } });
+    alert('Order placed!');
+    router.push("/");
     clearCart();
-  } catch (err: any) {
-    alert('Failed to place order: ' + (err?.message || err));
+  } catch {
+    alert('Failed to place order');
   } finally {
     loading.value = false;
   }
