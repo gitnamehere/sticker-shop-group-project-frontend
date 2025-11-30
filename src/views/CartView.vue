@@ -4,6 +4,11 @@ import StickerImage from '@/components/StickerImage.vue';
 import { API_URL } from '@/config';
 import { getCart, removeStickerFromCart } from '@/utils/cart';
 import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const accountId = localStorage.getItem('account_id');
+
+const router = useRouter();
 
 const cart = ref()
 
@@ -16,6 +21,8 @@ const removeFromCart = (index: number) => {
 }
 
 onBeforeMount(async () => {
+  if (!accountId) return router.push("/login");
+
   const stickersInCart = getCart();
   const stickers = [];
 

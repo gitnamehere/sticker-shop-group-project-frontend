@@ -3,7 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import StickerView from '@/views/StickerView.vue'
 import StickerUpload from '@/views/StickerUpload.vue'
 import CartView from '@/views/CartView.vue'
-import SignUp from '@/views/SignUp.vue'
+import SignupView from '@/views/SignupView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
 
@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignUp,
+      component: SignupView,
     },
     {
       path: '/login',
