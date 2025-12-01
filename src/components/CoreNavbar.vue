@@ -21,9 +21,7 @@ const logoutButton = () => {
       <div class="text-links">
         <h2 class="navbar__title">Sticker Shop</h2>
         <RouterLink to="/" class="nav-link fs-4">Home</RouterLink>
-        <template v-if="isLoggedIn">
-            <RouterLink to="/orders/all" class="nav-link fs-4">Orders</RouterLink>
-        </template>
+        <RouterLink v-if="isLoggedIn" to="/orders/all" class="nav-link fs-4">Orders</RouterLink>
       </div>
       <div class="icons">
         <template v-if="isLoggedIn">

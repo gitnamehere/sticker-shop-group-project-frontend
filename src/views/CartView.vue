@@ -41,7 +41,6 @@ interface Cart {
 }
 
 const cart = ref<Cart[]>([])
-const loading = ref(false);
 
 const removeFromCart = (index: number) => {
   removeStickerFromCart(index);
@@ -87,7 +86,6 @@ async function placeOrder() {
     return alert('Your cart is empty');
   }
 
-  loading.value = true;
   try {
     const itemsPayload = cart.value.map((sticker: Cart) => ({
       stickerId: sticker.stickerId,
@@ -118,8 +116,6 @@ async function placeOrder() {
     clearCart();
   } catch {
     alert('Failed to place order');
-  } finally {
-    loading.value = false;
   }
 }
 </script>
