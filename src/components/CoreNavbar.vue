@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+import { ref } from 'vue';
+
+const router = useRouter();
+const isLoggedIn = ref(localStorage.getItem('isLoggedIn') == 'true');
+
+const logoutButton = () => {
+  localStorage.removeItem('account_id');
+  localStorage.removeItem('isLoggedIn');
+  isLoggedIn.value = false;
+  router.push('/');
+};
 </script>
 
 <template>
@@ -10,7 +21,23 @@ import { RouterLink } from 'vue-router'
         <h2 class="navbar__title">Sticker Shop</h2>
         <RouterLink to="/" class="nav-link fs-4">Home</RouterLink>
       </div>
-      <div>
+      <div class="icons">
+        <template v-if="isLoggedIn">
+          <RouterLink to="/account" class="nav-link fs-4">
+            <FontAwesomeIcon icon="user-circle"/>
+          </RouterLink>
+          <button @click="logoutButton" class="nav-link fs-4">
+            <FontAwesomeIcon icon="sign-out-alt"/>
+          </button>
+        </template>
+        <template v-else>
+          <RouterLink to="/signup" class="nav-link fs-4">
+            <FontAwesomeIcon icon="user-plus"/>
+          </RouterLink>
+          <RouterLink to="/login" class="nav-link fs-4">
+            <FontAwesomeIcon icon="sign-in-alt"/>
+          </RouterLink>
+        </template>
         <RouterLink to="/cart" class="nav-link fs-4">
           <FontAwesomeIcon icon="cart-shopping"/>
         </RouterLink>
@@ -22,5 +49,9 @@ import { RouterLink } from 'vue-router'
 <style scoped lang="scss">
 .navbar__title {
   margin-right: 32px;
+}
+.icons {
+  display: flex;
+  gap: 10px;
 }
 </style>
