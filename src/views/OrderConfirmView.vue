@@ -10,10 +10,10 @@ const order = ref<any>(null);
 const error = ref("");
  
 async function loadOrder() {
+  const accountId = localStorage.getItem('account_id');
   try {
-    const res = await fetch(`${API_URL}orders/${orderId}`);
+    const res = await fetch(`${API_URL}orders/${orderId}/${accountId}`);
     if (!res.ok) throw new Error("Order not found");
-
     order.value = await res.json();
   } catch (err) {
     error.value = "Failed to load order.";

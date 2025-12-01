@@ -97,7 +97,7 @@ async function placeOrder() {
     }));
 
     const payload = {
-      accountId: 1, 
+      accountId: accountId, 
       items: itemsPayload,
     };
 
