@@ -53,7 +53,7 @@ onMounted(loadOrder);
     <h1>Order Confirmation</h1>
     <div v-if="order">
       <OrderItem :orderId="order.order_id" :order="order"/>
-      <button class="btn btn-danger mt-3" @click="deleteOrder(order.orderId)">
+      <button class="btn btn-danger mt-3" @click="deleteOrder">
         Delete Order
       </button>
     </div>
