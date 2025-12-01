@@ -2,7 +2,7 @@
 import { API_URL } from '@/config';
 import { ref } from 'vue';
 
-const account_id = localStorage.getItem('account_id') || "1";
+const account_id = localStorage.getItem('account_id');
 const image = ref();
 const name = ref("");
 const description = ref("");
@@ -18,19 +18,37 @@ const handleFileUpload = (event: any) => {
 const submitSticker = async () => {
   // Guide I used to upload images and data to backend:
   // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest_API/Using_FormData_Objects
-  const formData = new FormData();
-  formData.append("imageData", image.value);
-  formData.append("name", name.value);
-  formData.append("description", description.value);
-  formData.append("account_id", account_id);
+  if (!account_id) {
+    alert('You must be logged in to upload a sticker')
+    return
+  }
 
-  fetch(`${API_URL}stickers/create`, {
-    method: "POST",
-    body: formData,
-  });
+  try {
+    const formData = new FormData();
+    formData.append("imageData", image.value);
+    formData.append("name", name.value);
+    formData.append("description", description.value);
+    formData.append("account_id", account_id);
+
+    const res = await fetch(`${API_URL}stickers/create`, {
+      method: "POST",
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      console.error('Upload failed', res.status, text)
+      alert('Sticker upload failed')
+      return
+    }
+
+    alert('Sticker uploaded successfully!')
+    router.push('/')
+  } catch (err) {
+    console.error('Upload error', err)
+    alert('Sticker upload error')
+  }
 };
-
-
 </script>
 
 <template>
