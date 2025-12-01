@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { RouterLink, useRouter } from 'vue-router'
-import { inject } from 'vue';
+import { inject } from 'vue'
 
-const router = useRouter();
+const router = useRouter()
 
 // https://vuejs.org/guide/components/provide-inject#working-with-reactivity
-const { isLoggedIn, setIsLoggedIn } = inject("isLoggedIn");
+const { isLoggedIn, setIsLoggedIn } = inject('isLoggedIn')
 
 const logoutButton = () => {
-  localStorage.removeItem('account_id');
-  setIsLoggedIn(false);
-  router.push('/');
-};
+  localStorage.removeItem('account_id')
+  setIsLoggedIn(false)
+  router.push('/')
+}
 </script>
 
 <template>
@@ -26,22 +26,22 @@ const logoutButton = () => {
       <div class="icons">
         <template v-if="isLoggedIn">
           <RouterLink to="/account" class="nav-link fs-4">
-            <FontAwesomeIcon icon="user-circle"/>
+            <FontAwesomeIcon icon="user-circle" />
           </RouterLink>
           <button @click="logoutButton" class="nav-link fs-4">
-            <FontAwesomeIcon icon="sign-out-alt"/>
+            <FontAwesomeIcon icon="sign-out-alt" />
           </button>
         </template>
         <template v-else>
           <RouterLink to="/signup" class="nav-link fs-4">
-            <FontAwesomeIcon icon="user-plus"/>
+            <FontAwesomeIcon icon="user-plus" />
           </RouterLink>
           <RouterLink to="/login" class="nav-link fs-4">
-            <FontAwesomeIcon icon="sign-in-alt"/>
+            <FontAwesomeIcon icon="sign-in-alt" />
           </RouterLink>
         </template>
         <RouterLink to="/cart" class="nav-link fs-4">
-          <FontAwesomeIcon icon="cart-shopping"/>
+          <FontAwesomeIcon icon="cart-shopping" />
         </RouterLink>
       </div>
     </div>

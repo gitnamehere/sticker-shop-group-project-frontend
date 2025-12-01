@@ -6,20 +6,20 @@ import StickerImage from '@/components/StickerImage.vue'
 import { addStickerToCart } from '@/utils/cart'
 
 interface Color {
-  color_id: number,
+  color_id: number
   color: string
 }
 
 interface Material {
-  material_id: number,
-  material: string,
+  material_id: number
+  material: string
   price: number
 }
 
 interface Size {
-  size_id: number,
-  sticker_id: number,
-  length: number,
+  size_id: number
+  sticker_id: number
+  length: number
   width: number
 }
 
@@ -45,8 +45,14 @@ const nameEdit = ref('')
 const descriptionEdit = ref('')
 
 const addToCart = () => {
-  addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, selectedSize.value, 1);
-  router.push("/cart")
+  addStickerToCart(
+    stickerId.value,
+    selectedColor.value,
+    selectedMaterial.value,
+    selectedSize.value,
+    1,
+  )
+  router.push('/cart')
 }
 
 const isCreator = computed(() => {
@@ -74,7 +80,8 @@ const saveEdit = async () => {
 
   const payload: Record<string, string> = {}
   if (nameEdit.value && nameEdit.value !== stickerName.value) payload.name = nameEdit.value
-  if (descriptionEdit.value && descriptionEdit.value !== description.value) payload.description = descriptionEdit.value
+  if (descriptionEdit.value && descriptionEdit.value !== description.value)
+    payload.description = descriptionEdit.value
 
   if (!Object.keys(payload).length) {
     isEditing.value = false
@@ -85,7 +92,7 @@ const saveEdit = async () => {
     const res = await fetch(`${API_URL}stickers/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
 
     if (!res.ok) return alert('Failed to save sticker')
@@ -114,17 +121,17 @@ const deleteSticker = async () => {
 }
 
 const stickerBackgroundColor = computed(() => {
-  if (stickerType.value === 'image') return selectedColor.value.color;
+  if (stickerType.value === 'image') return selectedColor.value.color
 
-  return (selectedColor.value.color === 'white' ? '#EEE' : 'white');
+  return selectedColor.value.color === 'white' ? '#EEE' : 'white'
 })
 
 const price = computed(() => {
-  const { length, width } = selectedSize.value;
-  const { price } = selectedMaterial.value;
+  const { length, width } = selectedSize.value
+  const { price } = selectedMaterial.value
   // material price is based on 100 square cm
   // length and width are in centimeters
-  return price * ((length * width) / 100);
+  return price * ((length * width) / 100)
 })
 
 onBeforeMount(async () => {
@@ -138,23 +145,23 @@ onBeforeMount(async () => {
 
     const data = await response.json()
 
-    stickerId.value = data.sticker_id;
-    stickerName.value = data.name;
-    description.value = data.description;
-    stickerType.value = data.sticker.type;
-    creator.value = data.creator;
-    creatorId.value = data.account_id;
+    stickerId.value = data.sticker_id
+    stickerName.value = data.name
+    description.value = data.description
+    stickerType.value = data.sticker.type
+    creator.value = data.creator
+    creatorId.value = data.account_id
 
-    colors.value = data.sticker.colors;
-    materials.value = data.sticker.materials;
-    sizes.value = data.sticker.sizes;
+    colors.value = data.sticker.colors
+    materials.value = data.sticker.materials
+    sizes.value = data.sticker.sizes
 
-    selectedColor.value = data.sticker.colors[0];
-    selectedMaterial.value = data.sticker.materials[0];
-    selectedSize.value = data.sticker.sizes[0];
+    selectedColor.value = data.sticker.colors[0]
+    selectedMaterial.value = data.sticker.materials[0]
+    selectedSize.value = data.sticker.sizes[0]
 
     if (stickerType.value === 'polygonal') stickerShape.value = data.sticker.shape
-    if (stickerType.value === 'image') stickerData.value = data.sticker.image_data;
+    if (stickerType.value === 'image') stickerData.value = data.sticker.image_data
   } catch (error) {
     console.log(error)
   }
@@ -163,10 +170,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="container d-flex">
-    <div
-      class="sticker-container"
-      :style="{ backgroundColor: stickerBackgroundColor }"
-    >
+    <div class="sticker-container" :style="{ backgroundColor: stickerBackgroundColor }">
       <StickerImage
         :sticker-type="stickerType"
         :image-data="stickerData"
@@ -203,7 +207,7 @@ onBeforeMount(async () => {
             :style="{
               backgroundColor: item.color,
               borderWidth: selectedColor.color === item.color ? '4px' : '2px',
-              borderColor: selectedColor.color === item.color ? 'gray' : '#0002'
+              borderColor: selectedColor.color === item.color ? 'gray' : '#0002',
             }"
             @click="selectedColor = item"
           ></button>
@@ -216,7 +220,7 @@ onBeforeMount(async () => {
             v-for="item in sizes"
             :key="item.size_id"
             class="btn border me-2 mb-2"
-            :class="selectedSize.size_id === item.size_id? 'btn-secondary' : 'btn-light'"
+            :class="selectedSize.size_id === item.size_id ? 'btn-secondary' : 'btn-light'"
             @click="selectedSize = item"
           >
             {{ item.length }} cm x {{ item.width }} cm
@@ -224,20 +228,14 @@ onBeforeMount(async () => {
         </div>
       </div>
       <div>
-        <button class="btn btn-primary" @click="addToCart">
-          Add to cart
-        </button>
+        <button class="btn btn-primary" @click="addToCart">Add to cart</button>
       </div>
       <div v-if="isCreator" class="mt-4">
         <!-- used <template> to control element toggling based on conditions -->
         <!-- https://vuejs.org/guide/essentials/conditional#v-if-on-template -->
         <template v-if="!isEditing">
-          <button class="btn btn-secondary me-2" @click="startEdit">
-            Edit Sticker
-          </button>
-          <button class="btn btn-danger" @click="deleteSticker">
-            Delete Sticker
-          </button>
+          <button class="btn btn-secondary me-2" @click="startEdit">Edit Sticker</button>
+          <button class="btn btn-danger" @click="deleteSticker">Delete Sticker</button>
         </template>
         <template v-else>
           <div class="mb-2">
@@ -245,9 +243,7 @@ onBeforeMount(async () => {
             <textarea v-model="descriptionEdit" class="form-control" rows="3"></textarea>
           </div>
           <div>
-            <button v-if="isEditing" class="btn btn-success me-2" @click="saveEdit">
-              Save
-            </button>
+            <button v-if="isEditing" class="btn btn-success me-2" @click="saveEdit">Save</button>
             <button v-if="isEditing" class="btn btn-warning me-2" @click="cancelEdit">
               Cancel
             </button>

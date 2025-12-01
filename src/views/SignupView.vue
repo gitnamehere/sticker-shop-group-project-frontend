@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { API_URL } from '@/config';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { API_URL } from '@/config'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const firstName = ref("");
-const middleName = ref("");
-const lastName = ref("");
-const email = ref("");
-const password = ref("");
-const phoneNumber = ref("");
-const street = ref("");
-const city = ref("");
-const postalCode = ref("");
+const firstName = ref('')
+const middleName = ref('')
+const lastName = ref('')
+const email = ref('')
+const password = ref('')
+const phoneNumber = ref('')
+const street = ref('')
+const city = ref('')
+const postalCode = ref('')
 
-const router = useRouter();
+const router = useRouter()
 
 const submitButton = async () => {
   const payload = {
@@ -26,27 +26,26 @@ const submitButton = async () => {
     street: street.value,
     city: city.value,
     postalCode: postalCode.value,
-  };
+  }
 
   try {
     const res = await fetch(`${API_URL}account/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-    });
+    })
 
     if (!res.ok) {
-      return alert("Signup failed. Please try again.");
+      return alert('Signup failed. Please try again.')
     }
 
-    await res.json();
-    router.push('/login');
+    await res.json()
+    router.push('/login')
   } catch (err) {
-    console.error("Signup error:", err);
-    alert("Signup error. Please try again.");
+    console.error('Signup error:', err)
+    alert('Signup error. Please try again.')
   }
-};
-
+}
 </script>
 
 <template>
@@ -75,7 +74,12 @@ const submitButton = async () => {
       </div>
       <div class="col-12 col-md-6">
         <label class="form-label">Password</label>
-        <input v-model="password" type="password" placeholder="Create a password" class="form-control" />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Create a password"
+          class="form-control"
+        />
       </div>
     </div>
     <div class="row mb-2 gx-4">
@@ -105,5 +109,4 @@ const submitButton = async () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

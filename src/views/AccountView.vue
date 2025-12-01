@@ -1,54 +1,54 @@
 <script setup lang="ts">
-import { API_URL } from '@/config';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { API_URL } from '@/config'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
-const accountId = localStorage.getItem('account_id');
+const accountId = localStorage.getItem('account_id')
 
-const firstName = ref("");
-const middleName = ref("");
-const lastName = ref("");
-const email = ref("");
-const password = ref("");
-const phoneNumber = ref("");
-const street = ref("");
-const city = ref("");
-const postalCode = ref("");
+const firstName = ref('')
+const middleName = ref('')
+const lastName = ref('')
+const email = ref('')
+const password = ref('')
+const phoneNumber = ref('')
+const street = ref('')
+const city = ref('')
+const postalCode = ref('')
 
 onMounted(async () => {
   if (!accountId) {
-    router.push('/login');
-    return;
+    router.push('/login')
+    return
   }
 
   try {
-    const res = await fetch(`${API_URL}account/${accountId}`);
+    const res = await fetch(`${API_URL}account/${accountId}`)
     if (!res.ok) {
-      router.push('/login');
-      return;
+      router.push('/login')
+      return
     }
-    const data = await res.json();
+    const data = await res.json()
     if (data) {
-      firstName.value = data.first_name;
-      middleName.value = data.middle_name;
-      lastName.value = data.last_name;
-      email.value = data.email_address;
-      phoneNumber.value = data.phone_number;
-      street.value = data.street;
-      city.value = data.city;
-      postalCode.value = data.postal_code;
+      firstName.value = data.first_name
+      middleName.value = data.middle_name
+      lastName.value = data.last_name
+      email.value = data.email_address
+      phoneNumber.value = data.phone_number
+      street.value = data.street
+      city.value = data.city
+      postalCode.value = data.postal_code
     }
   } catch {
-    alert("Error fetching account details");
+    alert('Error fetching account details')
   }
-});
+})
 
 const submitButton = async () => {
   if (!accountId) {
-    router.push('/login');
-    return;
+    router.push('/login')
+    return
   }
 
   const payload = {
@@ -61,25 +61,25 @@ const submitButton = async () => {
     street: street.value,
     city: city.value,
     postalCode: postalCode.value,
-  };
+  }
 
   try {
     const res = await fetch(`${API_URL}account/${accountId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-    });
+    })
 
     if (!res.ok) {
-      return alert("Account failed to update")
+      return alert('Account failed to update')
     }
 
-    await res.json();
-    alert("Account updated!")
+    await res.json()
+    alert('Account updated!')
   } catch (err) {
-    console.error('Update error:', err);
+    console.error('Update error:', err)
   }
-};
+}
 </script>
 
 <template>
@@ -108,7 +108,12 @@ const submitButton = async () => {
       </div>
       <div class="col-12 col-md-6">
         <label class="form-label">Password</label>
-        <input v-model="password" type="password" placeholder="Create a password" class="form-control" />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Create a password"
+          class="form-control"
+        />
       </div>
     </div>
     <div class="row mb-2 gx-4">
@@ -138,5 +143,4 @@ const submitButton = async () => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import StickerImage from './StickerImage.vue';
+import StickerImage from './StickerImage.vue'
 
 defineProps<{
-  name: string;
+  name: string
   stickerType: string
   imageData?: string
   shape?: string
@@ -11,9 +11,7 @@ defineProps<{
 
 <template>
   <div class="sticker-grid-item">
-    <div
-      class="sticker-image-container d-flex"
-    >
+    <div class="sticker-image-container d-flex">
       <StickerImage
         :sticker-type="stickerType"
         :image-data="imageData"

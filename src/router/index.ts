@@ -50,7 +50,7 @@ const router = createRouter({
     {
       path: '/order/:orderId',
       name: 'orderConfirm',
-      component: OrderConfirmView
+      component: OrderConfirmView,
     },
     {
       path: '/orders/all',
