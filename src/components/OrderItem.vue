@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import StickerImage from '@/components/StickerImage.vue'
+import StickerImage from '@/components/StickerImage.vue';
 
 defineProps<{
   order: any
-}>()
+}>();
 </script>
 
 <template>
@@ -14,7 +14,7 @@ defineProps<{
         :stickerType="item.sticker.type"
         :imageData="item.sticker.image_data"
         :shape="item.sticker.shape"
-        :color="item.sticker.colors"
+        :color="item.color"
       />
     </div>
     <div class="sticker-details col-10">

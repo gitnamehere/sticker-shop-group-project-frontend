@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter} from 'vue-router';
 import { API_URL } from '@/config';
+import OrderItem from '@/components/OrderItem.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -51,17 +52,7 @@ onMounted(loadOrder);
   <div class="container">
     <h1>Order Confirmation</h1>
     <div v-if="order">
-      <p><strong>Order ID:</strong> {{ order.order_id }}</p>
-      <p><strong>Account ID:</strong> {{ order.account_id }}</p>
-
-      <h3 class="mt-3">Items</h3>
-      <ul>
-        <li v-for="item in order.items" :key="item.id">
-          Sticker ID: {{ item.sticker_id }},
-          Material ID: {{ item.sticker_material_id }},
-          Size ID: {{ item.sticker_size_id }}
-        </li>
-      </ul>
+      <OrderItem :orderId="order.order_id" :order="order"/>
       <button class="btn btn-danger mt-3" @click="deleteOrder(order.orderId)">
         Delete Order
       </button>
