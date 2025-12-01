@@ -1,15 +1,19 @@
 <script setup lang="ts">
 defineProps<{
   orderId: number
-  accountId?: number
+  order: any
 }>()
 </script>
 
 <template>
-  <div class="order-item">
-    <p><strong>Order #:</strong> {{ orderId }}</p>
-    <p v-if="accountId !== undefined"><strong>Account:</strong> {{ accountId }}</p>
-  </div>
+    <p><strong>Order #{{ order.order_id }}</strong></p>
+    <div v-for="item in order.items" :key="item.id" class="d-flex row mb-3">
+        <div class="sticker-details col-10">
+            <p> <strong>Material:</strong> {{ item.material }}</p>
+            <p> <strong>Color:</strong> ({{ item.color }})</p>
+            <p> <strong>Size:</strong> {{ `${item.length}cm × ${item.width}cm` }} </p>
+        </div>
+    </div>
 </template>
 
 <style scoped>

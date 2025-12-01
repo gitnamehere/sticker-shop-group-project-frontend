@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { API_URL } from '@/config';
     import { onBeforeMount, ref } from 'vue';
+    import OrderItem from '@/components/OrderItem.vue';
 
     const orders = ref([]);
     const accountId = localStorage.getItem('account_id');
@@ -24,14 +25,12 @@
 </script>
 
 <template>
-    <main>
-        <div class="container">
-            <h2>Customer Orders</h2>
-            <div class="row gy-4">
-                <div v-for="order in orders" :key="order.order_id" class="col-12 mb-3 p-3 border rounded">
-                    <!-- Insert order details here; Waiting on order component -->
-                </div>
-            </div>
-        </div>
-    </main>
+  <div class="container">
+    <h2>Customer Orders</h2>
+    <div v-if="orders?.length" class="list-group">
+        <div v-for="order in orders" :key="order.order_id" class="list-group-item order-item d-flex row" >
+            <OrderItem :orderId="order.order_id" :order="order"/>
+      </div>
+    </div>
+  </div>
 </template>
