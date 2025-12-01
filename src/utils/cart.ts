@@ -1,11 +1,12 @@
-// TODO: add size and quantity
-export const addStickerToCart = (sticker_id: number, color: string, material: string, quantity: number) => {
+// TODO: type these properly later
+export const addStickerToCart = (sticker_id: number, color: object, material: object, size: object, quantity: number) => {
   const cart = getCart();
 
   cart.push({
     sticker_id,
     color,
     material,
+    size,
     quantity
   });
 
@@ -31,3 +32,8 @@ export const removeStickerFromCart = (index: number) => {
 
   localStorage.setItem("cart", JSON.stringify(cart));
 }
+
+export const clearCart = () => {
+  localStorage.removeItem("cart");
+}
+

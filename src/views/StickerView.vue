@@ -5,6 +5,24 @@ import { useRoute, useRouter } from 'vue-router'
 import StickerImage from '@/components/StickerImage.vue'
 import { addStickerToCart } from '@/utils/cart'
 
+interface Color {
+  color_id: number,
+  color: string
+}
+
+interface Material {
+  material_id: number,
+  material: string,
+  price: number
+}
+
+interface Size {
+  size_id: number,
+  sticker_id: number,
+  length: number,
+  width: number
+}
+
 const route = useRoute()
 const router = useRouter()
 
@@ -16,16 +34,18 @@ const stickerId = ref()
 const stickerType = ref('')
 const stickerData = ref('')
 const stickerShape = ref('square')
-const selectedMaterial = ref('')
-const selectedColor = ref('')
-const colors = ref([])
-const materials = ref([])
+const selectedMaterial = ref()
+const selectedColor = ref()
+const selectedSize = ref()
+const colors = ref<Color[]>([])
+const materials = ref<Material[]>([])
+const sizes = ref<Size[]>([])
 const isEditing = ref(false)
 const nameEdit = ref('')
 const descriptionEdit = ref('')
 
 const addToCart = () => {
-  addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, 1);
+  addStickerToCart(stickerId.value, selectedColor.value, selectedMaterial.value, selectedSize.value, 1);
   router.push("/cart")
 }
 
@@ -94,9 +114,17 @@ const deleteSticker = async () => {
 }
 
 const stickerBackgroundColor = computed(() => {
-  if (stickerType.value === 'image') return selectedColor.value;
+  if (stickerType.value === 'image') return selectedColor.value.color;
 
-  return (selectedColor.value === 'white' ? '#EEE' : 'white');
+  return (selectedColor.value.color === 'white' ? '#EEE' : 'white');
+})
+
+const price = computed(() => {
+  const { length, width } = selectedSize.value;
+  const { price } = selectedMaterial.value;
+  // material price is based on 100 square cm
+  // length and width are in centimeters
+  return price * ((length * width) / 100);
 })
 
 onBeforeMount(async () => {
@@ -119,9 +147,11 @@ onBeforeMount(async () => {
 
     colors.value = data.sticker.colors;
     materials.value = data.sticker.materials;
+    sizes.value = data.sticker.sizes;
 
-    selectedColor.value = data.sticker.colors[0].color;
-    selectedMaterial.value = data.sticker.materials[0].material;
+    selectedColor.value = data.sticker.colors[0];
+    selectedMaterial.value = data.sticker.materials[0];
+    selectedSize.value = data.sticker.sizes[0];
 
     if (stickerType.value === 'polygonal') stickerShape.value = data.sticker.shape
     if (stickerType.value === 'image') stickerData.value = data.sticker.image_data;
@@ -141,13 +171,14 @@ onBeforeMount(async () => {
         :sticker-type="stickerType"
         :image-data="stickerData"
         :shape="stickerShape"
-        :color="selectedColor"
+        :color="selectedColor.color"
       />
     </div>
     <div class="card container-fluid p-3">
       <h2 class="mb-2">{{ stickerName }}</h2>
-      <p>{{ description }}</p>
-      <p class="fw-light">By: {{ creator }}</p>
+      <p class="mb-2">{{ description }}</p>
+      <p class="fw-light mb-3">By: {{ creator }}</p>
+      <h3 class="mb-3">${{ price }}</h3>
       <div class="mb-3">
         <p class="mb-0">Material</p>
         <div>
@@ -155,8 +186,8 @@ onBeforeMount(async () => {
             v-for="item in materials"
             :key="item.material_id"
             class="btn border me-2 mb-2"
-            :class="selectedMaterial === item.material ? 'btn-secondary' : 'btn-light'"
-            @click="selectedMaterial = item.material"
+            :class="selectedMaterial.material === item.material ? 'btn-secondary' : 'btn-light'"
+            @click="selectedMaterial = item"
           >
             {{ item.material }}
           </button>
@@ -167,15 +198,29 @@ onBeforeMount(async () => {
         <div>
           <button
             v-for="item in colors"
-            :key="item"
+            :key="item.color_id"
             class="color-swatch btn me-2 mb-2 col-2"
             :style="{
               backgroundColor: item.color,
-              borderWidth: selectedColor === item.color ? '4px' : '2px',
-              borderColor: selectedColor === item.color ? 'gray' : '#0002'
+              borderWidth: selectedColor.color === item.color ? '4px' : '2px',
+              borderColor: selectedColor.color === item.color ? 'gray' : '#0002'
             }"
-            @click="selectedColor = item.color"
+            @click="selectedColor = item"
           ></button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <p class="mb-0">Sticker Size</p>
+        <div>
+          <button
+            v-for="item in sizes"
+            :key="item.size_id"
+            class="btn border me-2 mb-2"
+            :class="selectedSize.size_id === item.size_id? 'btn-secondary' : 'btn-light'"
+            @click="selectedSize = item"
+          >
+            {{ item.length }} cm x {{ item.width }} cm
+          </button>
         </div>
       </div>
       <div>
