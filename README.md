@@ -11,3 +11,9 @@ Vue frontend for https://github.com/gitnamehere/sticker-shop-group-project
 3. Run `npm run start`
 
 4. http://localhost:5173/
+
+## Other Commands:
+
+Prettier: `npm run format`
+
+ESLint: `npm run lint`
