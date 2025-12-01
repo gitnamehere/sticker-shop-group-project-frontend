@@ -29,7 +29,7 @@
     <h2>Customer Orders</h2>
     <div v-if="orders?.length" class="list-group">
         <div v-for="order in orders" :key="order.order_id" class="list-group-item order-item d-flex row" >
-            <OrderItem :orderId="order.order_id" :order="order"/>
+            <OrderItem :order="order"/>
       </div>
     </div>
   </div>

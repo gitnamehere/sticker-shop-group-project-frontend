@@ -21,16 +21,28 @@ const handleFileUpload = (event: any) => {
 const submitSticker = async () => {
   // Guide I used to upload images and data to backend:
   // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest_API/Using_FormData_Objects
-  const formData = new FormData();
-  formData.append("imageData", image.value);
-  formData.append("name", name.value);
-  formData.append("description", description.value);
-  formData.append("account_id", account_id);
+  try {
+    const formData = new FormData();
+    formData.append("imageData", image.value);
+    formData.append("name", name.value);
+    formData.append("description", description.value);
+    formData.append("account_id", account_id);
 
-  fetch(`${API_URL}stickers/create`, {
-    method: "POST",
-    body: formData,
-  });
+    const res = await fetch(`${API_URL}stickers/create`, {
+      method: "POST",
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      alert('Sticker upload failed')
+      return
+    }
+    
+    alert('Sticker uploaded successfully!')
+    router.push('/')
+  } catch (err) {
+    alert('Sticker upload error')
+  }
 };
 
 onBeforeMount(() => {
