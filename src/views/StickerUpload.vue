@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { API_URL } from '@/config';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const account_id = localStorage.getItem('account_id') || "1";
+const router = useRouter();
+
+const account_id = localStorage.getItem('account_id');
 const image = ref();
 const name = ref("");
 const description = ref("");
@@ -30,7 +33,9 @@ const submitSticker = async () => {
   });
 };
 
-
+onBeforeMount(() => {
+  if (!account_id) router.push("/login")
+})
 </script>
 
 <template>

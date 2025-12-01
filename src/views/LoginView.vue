@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { API_URL } from '@/config';
-import { ref } from 'vue';
+import { inject, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const email = ref("");
 const password = ref("");
 
 const router = useRouter();
+
+// https://vuejs.org/guide/components/provide-inject#working-with-reactivity
+const { isLoggedIn, setIsLoggedIn } = inject("isLoggedIn");
 
 const loginButton = async () => {
   const payload = {
@@ -32,14 +35,17 @@ const loginButton = async () => {
       throw Error();
     }
 
-    localStorage.removeItem('user');
-    localStorage.setItem('account_id', String(account_id));
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('account_id', JSON.stringify(account_id));
+    setIsLoggedIn(true);
     router.push('/');
   } catch {
     alert("Login error. Please try again.");
   }
 };
+
+onBeforeMount(() => {
+  if (isLoggedIn.value) router.push("/");
+})
 </script>
 
 <template>

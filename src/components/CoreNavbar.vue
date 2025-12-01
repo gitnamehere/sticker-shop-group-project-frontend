@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { RouterLink, useRouter } from 'vue-router'
-import { ref } from 'vue';
+import { inject } from 'vue';
 
 const router = useRouter();
-const isLoggedIn = ref(localStorage.getItem('isLoggedIn') == 'true');
+
+// https://vuejs.org/guide/components/provide-inject#working-with-reactivity
+const { isLoggedIn, setIsLoggedIn } = inject("isLoggedIn");
 
 const logoutButton = () => {
   localStorage.removeItem('account_id');
-  localStorage.removeItem('isLoggedIn');
-  isLoggedIn.value = false;
+  setIsLoggedIn(false);
   router.push('/');
 };
 </script>

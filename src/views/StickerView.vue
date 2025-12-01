@@ -11,7 +11,7 @@ const router = useRouter()
 const stickerName = ref('')
 const description = ref('')
 const creator = ref('A Creator')
-const creatorId = ref<string | number | null>(null)
+const creatorId = ref()
 const stickerId = ref()
 const stickerType = ref('')
 const stickerData = ref('')
@@ -33,8 +33,8 @@ const isCreator = computed(() => {
   try {
     const stored = localStorage.getItem('account_id')
     if (!stored || !creatorId.value) return false
-    return String(stored) === String(creatorId.value)
-  } catch (e) {
+    return stored == creatorId.value
+  } catch {
     return false
   }
 })
@@ -115,7 +115,7 @@ onBeforeMount(async () => {
     description.value = data.description;
     stickerType.value = data.sticker.type;
     creator.value = data.creator;
-    creatorId.value = data.account_id ?? null
+    creatorId.value = data.account_id;
 
     colors.value = data.sticker.colors;
     materials.value = data.sticker.materials;
