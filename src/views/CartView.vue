@@ -46,6 +46,8 @@ const loading = ref(false);
 const removeFromCart = (index: number) => {
   removeStickerFromCart(index);
   // reload page to refresh cart page
+  // (we should probably do this reactively)
+  // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload
   window.location.reload();
 }
 
