@@ -27,7 +27,7 @@ async function deleteOrder() {
   if (!order.value) return
   const id = order.value.order_id
 
-  if (!confirm('Delete this order?')) return
+  if (!confirm('Cancel this order?')) return
 
   try {
     const res = await fetch(`${API_URL}orders/${id}`, {
@@ -35,13 +35,13 @@ async function deleteOrder() {
     })
 
     if (res.status === 204) {
-      alert('Order deleted!')
-      router.push('/orders/all')
+      alert('Order canceled!')
+      router.push('/')
     } else {
-      alert('Failed to delete order')
+      alert('Failed to cancel order')
     }
   } catch {
-    console.error('Error deleting order')
+    console.error('Error canceling order')
   }
 }
 
@@ -53,7 +53,7 @@ onMounted(loadOrder)
     <h1>Order Confirmation</h1>
     <div v-if="order">
       <OrderItem :orderId="order.order_id" :order="order" />
-      <button class="btn btn-danger mt-3" @click="deleteOrder">Delete Order</button>
+      <button class="btn btn-danger mt-3" @click="deleteOrder">Cancel Order</button>
     </div>
     <p v-else class="text-danger">Failed to load order</p>
   </div>
